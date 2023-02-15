@@ -8,7 +8,6 @@ const refs = {
   inputEl: document.getElementById('search-box'),
   ulEl: document.querySelector('.country-list'),
   divEl: document.querySelector('.country-info'),
-  URL_Country: 'https://restcountries.com/v3.1/name',
   DEBOUNCE_DELAY: 300,
 };
 
@@ -16,10 +15,6 @@ refs.inputEl.addEventListener(
   'input',
   debounce(onSearchCountry, refs.DEBOUNCE_DELAY)
 );
-
-function resMarkup(data) {
-  data.innerHTML = '';
-}
 
 function onSearchCountry(event) {
   event.preventDefault();
@@ -43,7 +38,7 @@ function onSearchCountry(event) {
         createMarkupFlagsCountry(dataCountry);
         resMarkup(refs.divEl);
       } else {
-        resetMarkup(refs.divEl);
+        resMarkup(refs.divEl);
         createMarkupInfoCountry(dataCountry);
         resMarkup(refs.ulEl);
       }
@@ -60,7 +55,7 @@ function createMarkupFlagsCountry(nameCountry) {
   const markup = nameCountry
     .map(({ name, flags }) => {
       return `<li class="country-list__item">
-        <img class="country-list__img" src="${flags.svg}" width="90" alt="flag" />
+        <img class="country-list__img" src="${flags.svg}" width="60" alt="flag" />
         <p class="country-list__text">${name.official}</p>
       </li>`;
     })
@@ -73,7 +68,7 @@ function createMarkupInfoCountry(infoCountry) {
     .map(({ name, capital, population, flags, languages }) => {
       return `
   <div class="country__flag">
-    <img class="country__img" src="${flags.svg}" alt="flag">
+    <img class="country__img" src="${flags.svg}" width="150" alt="flag">
     <p class="country__name">${name.official}</p>
   </div>
   <ul class="country__info">
@@ -93,8 +88,9 @@ function createMarkupInfoCountry(infoCountry) {
   return refs.divEl.insertAdjacentHTML('beforeend', markup);
 }
 
-// liEl = document.querySelector('.country__item');
-// liEl.style.color = 'blue';
-// refs.inputEl.style.borderColor = 'blue';
+function resMarkup(data) {
+  data.innerHTML = '';
+}
+
 refs.inputEl.style.borderRadius = '10px';
 refs.inputEl.style.borderColor = 'gold';
