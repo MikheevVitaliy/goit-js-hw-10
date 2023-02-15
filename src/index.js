@@ -3,7 +3,6 @@ import debounce from 'lodash.debounce';
 import Notiflix from 'notiflix';
 import fetchCountries from './fetchCountries.js';
 
-// const DEBOUNCE_DELAY = 300;
 const refs = {
   inputEl: document.getElementById('search-box'),
   ulEl: document.querySelector('.country-list'),
@@ -32,15 +31,15 @@ function onSearchCountry(event) {
         Notiflix.Notify.info(
           'Too many matches found. Please enter a more specific name.'
         );
-      } else if (dataCountry.length >= 2 && dataCountry.length <= 10) {
+      } else if (dataCountry.length <= 10 && dataCountry.length >= 2) {
         refs.inputEl.style.borderColor = 'blue';
         resMarkup(refs.ulEl);
-        createMarkupFlagsCountry(dataCountry);
         resMarkup(refs.divEl);
+        createMarkupFlagsCountry(dataCountry);
       } else {
+        resMarkup(refs.ulEl);
         resMarkup(refs.divEl);
         createMarkupInfoCountry(dataCountry);
-        resMarkup(refs.ulEl);
       }
     })
     .catch(() => {
@@ -49,6 +48,10 @@ function onSearchCountry(event) {
       resMarkup(refs.divEl);
       Notiflix.Notify.failure('Oops, there is no country with that name');
     });
+}
+
+function resMarkup(data) {
+  data.innerHTML = '';
 }
 
 function createMarkupFlagsCountry(nameCountry) {
@@ -86,10 +89,6 @@ function createMarkupInfoCountry(infoCountry) {
     .join('');
 
   return refs.divEl.insertAdjacentHTML('beforeend', markup);
-}
-
-function resMarkup(data) {
-  data.innerHTML = '';
 }
 
 refs.inputEl.style.borderRadius = '10px';
